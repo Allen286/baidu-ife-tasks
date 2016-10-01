@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-width: 600px;
+}
+
+/*左右两列绝对定位后脱离文档流，无法撑开父元素，父元素高度变由中间列决定，如何解决？*/
+.wrap {
+    position: relative;
+    padding:20px;
+    margin: 20px;
+    background-color: #eee;
+    border: 1px solid #999;
+    overflow: hidden;
+}
+.left{
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 200px;
+    padding:20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #999;
+
+}
+.team-logo {
+    width: 80px;
+    height: 80px;
+    background-color: #eee;
+    border: 1px solid #999;
+    /*display: inline-block;*/
+    float: left;
+    margin-right: 20px;
+}
+.right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 120px;
+    padding:20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #999;
+}
+.middle {
+    background-color: #fff;
+    margin-left: 220px;
+    margin-right: 140px;
+    padding:20px;
+    box-sizing: border-box;
+    border: 1px solid #999;
+}
+.member {
+    width: 80px;
+    height: 80px;
+    background-color: #eee;
+    margin-top: 20px;
+    border: 1px solid #999;
+}

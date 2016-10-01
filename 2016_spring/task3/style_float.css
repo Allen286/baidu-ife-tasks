@@ -1,0 +1,67 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-width: 600px;
+}
+.wrap {
+    padding:20px;
+    margin: 20px;
+    background-color: #eee;
+    border: 1px solid #999;
+    /*overflow: hidden;*/
+    zoom: 1;   /*Trigger "hasLayout" for IE6/7 */
+}
+
+/*清除浮动方法：clear或者overflow。IE6/7中，两种方法都需要搭配display:inline-block或zoom: 1来触发hasLayout*/
+/*双冒号(::after)时唯独ie8不支持；换成单冒号(:after)后都正常。why？很多教程都写得双冒号*/
+.wrap:after {
+    content: "";
+    display: table;
+    /*display: block;*/
+    clear: both;
+}
+
+/*box-sizing属性ie8以下版本不支持，尤其ie7。。ie6本来就是自己盒模型。。*/
+.left{
+    width: 200px;
+    float: left;
+    padding:20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #999;
+
+}
+.team-logo {
+    width: 80px;
+    height: 80px;
+    background-color: #eee;
+    border: 1px solid #999;
+    /*display: inline-block;*/
+    float: left;
+    margin-right: 20px;
+}
+.right {
+    width: 120px;
+    float: right;
+    padding:20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #999;
+}
+.middle {
+    background-color: #fff;
+    margin-left: 220px;
+    margin-right: 140px;
+    padding:20px;
+    box-sizing: border-box;
+    border: 1px solid #999;
+}
+.member {
+    width: 80px;
+    height: 80px;
+    background-color: #eee;
+    margin-top: 20px;
+    border: 1px solid #999;
+}

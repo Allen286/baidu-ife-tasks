@@ -135,7 +135,7 @@ function simpleTrim(str) {
     }
     var len = str.length;
     for (var i = 0; i < len && isEmpty(str.charAt(i)); i++);
-    if (i === len) {
+    if (i === len) {  //字符串全是空格或者字符串为空循环根本没执行
         return '';
     }
     for (var j = len; j && isEmpty(str.charAt(j - 1)); j--);
