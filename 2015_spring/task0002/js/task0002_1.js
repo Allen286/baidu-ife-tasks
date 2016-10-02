@@ -22,7 +22,7 @@ var btn2 = document.getElementById('btn2');
 var result = document.getElementById('result');
 
 function inputHobby() {
-    result.innerHTML = '';  //每次清空之前生成的爱好项
+    result.innerHTML = ''; //每次清空之前生成的爱好项
     var text = trim(otext.value.replace(/[\s,，、;；]+/g, ' ')); // 将多项用空格分开，并trim去除首尾空格，trim函数见util.js
     var arr = uniqArray(text.split(' ')); //uniqArray()函数见util.js
     if (arr[0] === '' || arr.length > 10) {

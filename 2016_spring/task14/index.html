@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task14</title>
+</head>
+<body>
+      <label>请输入空气质量指数：<input id="aqi-input" type="text" placeholder="例如：60"></label>
+      <button id="button">确认填写</button>
+
+      <div>您输入的值是：<span id="aqi-display">尚无录入</span></div>
+
+      <h3>空气质量指数大于等于您输入值的城市列表：</h3>
+      <ul id="aqi-list"></ul>
+
+    <script type="text/javascript">
+
+    (function() {
+      /*    
+      在注释下方写下代码
+      遍历读取aqiData中各个城市的数据
+      将空气质量指数大于60的城市显示到aqi-list的列表中
+      */
+      var aqiData = [
+        ["北京", 90],
+        ["上海", 50],
+        ["福州", 10],
+        ["广州", 50],
+        ["成都", 90],
+        ["西安", 100]
+      ];
+
+      var input = document.getElementById('aqi-input');
+      var btn = document.getElementById('button');
+      var display = document.getElementById('aqi-display');
+      var list = document.getElementById('aqi-list');
+      
+      var handler = function() {
+        var num = parseInt(input.value);
+        display.innerHTML = num;
+
+        if (isNaN(num) || num < 0 || num > 1000) {
+          alert(input.value + " 不是有效的空气质量值，请重新输入");
+        } else {
+          list.innerHTML = '';
+          for (var i = 0; i < aqiData.length; i++) {
+            if (aqiData[i][1] >= num) {
+              appendLi(aqiData[i]);
+            }
+          }
+        }
+
+        if (list.children.length == 0) {
+          appendLi('数据中无匹配项');
+        }
+        
+      }
+
+      function appendLi(str) {
+        var li = document.createElement('li');
+        li.innerHTML = str;
+        list.appendChild(li);
+      }
+
+      btn.onclick = function() {
+        handler();
+      }
+
+      input.onkeyup = function(event) {
+        if (event.keyCode === 13) {
+          handler();
+        }
+      }
+
+    })();
+
+    </script>
+</body>
+</html>

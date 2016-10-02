@@ -383,6 +383,7 @@ ul.dot{
     height: 42px;
     margin: 0 auto;
     line-height: 40px;
+    color: #fff;
     border: 1px solid #fff; 
 }
 .sec7-item:nth-child(2) {
