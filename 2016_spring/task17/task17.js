@@ -23,7 +23,8 @@ function randomBuildData(seed) {
   var returnData = {};
   var dat = new Date("2016-01-01");
   var datStr = '';
-  for (var i = 1; i < 92; i++) {
+  // 2016年是闰年，366天
+  for (var i = 0; i < 366; i++) {
     datStr = getDateStr(dat);
     returnData[datStr] = Math.ceil(Math.random() * seed);
     dat.setDate(dat.getDate() + 1);
@@ -75,7 +76,7 @@ function renderChart() {
     color = '';
   for (var item in chartData) {
     color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
-    text += '<div style="background-color:' + color + ';height:' + chartData[item] + 'px"></div>';
+    text += '<div style="background-color:' + color + ';height:' + chartData[item] + 'px" title="' + item + '：' + chartData[item] + '"></div>';
   }
   aqiChartWrap.innerHTML = text;
 }
@@ -90,6 +91,8 @@ function graTimeChange() {
   } else {
     pageState.nowGraTime = this.value;
   }
+  // 修改图表标题
+  document.getElementById('title-time').innerHTML=this.parentNode.textContent;
   // 设置对应数据
   initAqiChartData();
   // 调用图表渲染函数
@@ -104,9 +107,10 @@ function citySelectChange() {
   // if (pageState.nowSelectCity === this.value) {return;} 
   // change事件只有在select选项变化时才触发，选择相同选项不会触发，所以上面的判断省略
   pageState.nowSelectCity = this.value;
-
+  // 修改图表标题
+  document.getElementById('title-city').innerHTML=pageState.nowSelectCity;
   // 设置对应数据
-  initAqiChartData;
+  initAqiChartData();
   // 调用图表渲染函数
   renderChart();
 }
@@ -143,10 +147,63 @@ function initAqiChartData() {
   // 将原始的源数据处理成图表需要的数据格式
   var nowCityData = aqiSourceData[pageState.nowSelectCity];
   // 处理好的数据存到 chartData 中
-  if (pageState.nowGraTime == 'day') {
+  if (pageState.nowGraTime === 'day') {
     chartData = nowCityData;
   }
-  
+  var sumDayAqi = 0,
+    sumDay = 0,
+    week = 0,
+    month = 0;
+
+  if (pageState.nowGraTime === 'week') {
+    chartData = {};
+    for (var item in nowCityData) {
+      // 记录下每周开始的日期
+      if (sumDay == 0) {
+        var startDate = item;
+      }
+      sumDay++;
+      sumDayAqi += nowCityData[item];
+      // 循环每到周日，计算每个自然周的数据并添加到chartData中
+      if (new Date(item).getDay() === 0) {
+        week++;
+        var keyStr = '第' + week + '周，' + startDate + '到' + item;
+        chartData[keyStr] = Math.floor(sumDayAqi / sumDay);
+        sumDay = 0;
+        sumDayAqi = 0;
+      }
+      // 处理剩下的不够一周的最后几天
+      if (item==='2016-12-31') {
+        week++;
+        keyStr = '第' + week + '周，' + startDate + '到' + item;
+        chartData[keyStr] = Math.floor(sumDayAqi / sumDay);
+      }
+    }
+  }
+
+  if (pageState.nowGraTime === 'month') {
+    chartData={};
+    for(var item in nowCityData){
+      // 记录下开始的月份
+      if (sumDay===0) {
+        var startMon = item.slice(0, 7);
+      }
+      // 循环完一个月进入下一个月第一天时计算上月相关数据
+      if (item.slice(0, 7) !== startMon) {
+        chartData[startMon]=Math.floor(sumDayAqi / sumDay);
+        sumDay = 0;
+        sumDayAqi = 0;
+        startMon = item.slice(0, 7)
+      }
+      sumDay++;
+      sumDayAqi += nowCityData[item];
+      // 单独处理最后一月
+      if (item==='2016-12-31') {
+        chartData[startMon]=Math.floor(sumDayAqi / sumDay);
+      }
+    }
+  }
+
 }
 
 /**
