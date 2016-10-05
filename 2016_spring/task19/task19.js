@@ -109,7 +109,7 @@ function addDivDelEvent() {
 //随机数来初始化队列
 function initQueue() {
     for (var i = 0; i < 30; i++) {
-        queue.str[i] = Math.floor((Math.random() * 200)+1);
+        queue.str[i] = Math.floor((Math.random() * 200) + 1);
     }
     queue.display();
 }
@@ -127,8 +127,12 @@ console.log('a=', a); //a=2
 console.log('b=', b); //b=3*/
 // 完全没影响a和b的值。基本类型值参数按值传递，交换的只是函数内局部变量a和b的值。
 // 函数swap执行完后，内部变量a和b即被销毁。外部作用域的a和b根本不会变化
+// 怎样改写？
+// 可改成数组对象内部方法，函数内使用this，通过数组实例调用。在外部调用此方法时利用call或apply改变this指向
 
-//冒泡排序
+
+
+//冒泡排序，基础写法，内层循环控制j < len - 1 - i
 function bubbleSort(arr) {
     for (var i = 0, len = arr.length; i < len; i++) {
         for (var j = 0; j < len - 1 - i; j++) {
@@ -136,25 +140,67 @@ function bubbleSort(arr) {
                 var temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
-                queue.display();
             }
         }
         // console.log(arr[len - i - 1]);
     }
 }
 
-// 如何使冒泡排序有动画效果？定时器？
-// 下面这种写法不太好，即循环时间是由定时器interval的间隔控制的，run函数每执行一次i++或j++
-// 执行够相应次数后才会触发clearInterval清除定时器，所以执行时间固定，会出现“假完成状态”
+// 选择排序，基础写法,利用cur存储最小值的下标，内层循环控制j = i
+function selectSort(arr) {
+    for (var i = 0; i < arr.length - 1; i++) {
+        var cur = i;
+        for (var j = i + 1; j < arr.length; j++) {
+            if (arr[cur] > arr[j]) {
+                cur = j;
+            }
+        }
+        // console.log(arr[cur]);
+        var temp = arr[i];
+        arr[i] = arr[cur];
+        arr[cur] = temp;
+    }
+}
 
-function animateBubble1(arr) {
+// 冒泡排序动画版：相邻两两比较，值大的换到后面，元素向上移动至正确的顺序，像冒泡一样
+function animateBubbleSort(arr) {
     clearInterval(timer);
     var i = 0,
         j = 1,
         temp = 0,
         len = arr.length;
-    var timer = setInterval(run,10);
-    // 版本1：第一个与后面每一个比较，哪个更小就把它的值换给第一个，最后效果是最小的先冒到前面
+    var timer = setInterval(run, 10);
+
+    function run() {
+        if (i < len) {
+            if (j < len - i) {
+                if (arr[j - 1] > arr[j]) {
+                    temp = arr[j - 1];
+                    arr[j - 1] = arr[j];
+                    arr[j] = temp;
+                    queue.display();
+                }
+                j++;
+            } else {
+                i++;
+                j = 1;
+            }
+        } else {
+            clearInterval(timer);
+            return;
+        }
+    }
+}
+
+// 选择排序动画版：第一个与后面每一个比较，哪个更小就把它的值换给第一个，找出最小的值放在第一位，接着找出第二小的值放在第二位
+function animateSelectSort(arr) {
+    clearInterval(timer);
+    var i = 0,
+        j = 1,
+        temp = 0,
+        len = arr.length;
+    var timer = setInterval(run, 10);
+
     function run() {
         if (i < len) {
             if (j < len) {
@@ -169,57 +215,39 @@ function animateBubble1(arr) {
                 i++;
                 j = i + 1;
             }
-        }else{
+        } else {
             clearInterval(timer);
             return;
         }
     }
 }
 
-function animateBubble2(arr) {
-    clearInterval(timer);
-    var i = 0,
-        j = 1,
-        temp = 0,
-        len = arr.length;
-    var timer = setInterval(run,10);
-    // 版本2：相邻两两比较，较大值给后者，最后效果是最大的先冒到后面
-    function run() {
-        if (i < len) {
-            if (j < len-i) {
-                if (arr[j-1] > arr[j]) {
-                    temp = arr[j-1];
-                    arr[j-1] = arr[j];
-                    arr[j] = temp;
-                    queue.display();
-                }
-                j++;
-            } else {
-                i++;
-                j=1;
-            }
-        }else{
-            clearInterval(timer);
-            return;
-        }
-    }
-}
+// 如何使排序有动画效果？定时器？
+// 上面这种写法不太好，即循环时间是由定时器interval的间隔控制的，run函数每执行一次i++或j++
+// 执行够相应次数后才会触发clearInterval清除定时器，所以执行时间固定，会出现“假完成状态”
 
 addEvent(btnList[5], 'click', function() {
     initQueue();
 });
+
 /*
-// 无动画版本，最快速度排完序，然后再一次性渲染成图表
+// 冒泡排序无动画版本，迅速排完序，排完后一次性渲染成图表
 addEvent(btnList[6], 'click', function() {
     bubbleSort(queue.str);
     queue.display();
 });
-*/
-addEvent(btnList[6],'click',function(){
-    animateBubble1(queue.str);
+// 选择排序无动画版本
+addEvent(btnList[7], 'click', function() {
+    selectSort(queue.str);
+    queue.display();
 });
-addEvent(btnList[7],'click',function(){
-    animateBubble2(queue.str);
+*/
+
+addEvent(btnList[6], 'click', function() {
+    animateBubbleSort(queue.str);
+});
+addEvent(btnList[7], 'click', function() {
+    animateSelectSort(queue.str);
 });
 
 /*有bug,排序动画执行中点击初始化或者其他排序方法会出现错乱？还有“假完成状态”
