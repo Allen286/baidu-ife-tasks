@@ -60,11 +60,13 @@ function splitInput(str) {
     });
 }
 
-// 根据数组arr中的数据在node区域渲染绘制dom节点
+// 根据数组arr中的数据在node区域渲染绘制dom节点,并给节点绑定相关事件
 function render(node, arr) {
     node.innerHTML = arr.map(function(e) {
         return '<span>' + e + '</span>';
     }).join('');
+    // 使用事件代理时就不用加下面这句了，包裹node始终存在，页面初始化时添加一次监听函数就行了
+    addDelEvent(node, arr);
 }
 
 function showTag() {
@@ -107,33 +109,75 @@ addEventHandler(tagInput, 'keyup', showTag);
 addEventHandler(hobbyBtn, 'click', showHobby);
 
 function addDelEvent(node, arr) {
-    addEventHandler(node, 'mouseover', function(e) {
-        if (e.target && e.target.nodeName == "SPAN") {
-            e.target.textContent = '删除：' + e.target.textContent;
-            e.target.style.backgroundColor = '#fe8787';
-        }
-    });
-    addEventHandler(node, 'mouseout', function(e) {
-        if (e.target && e.target.nodeName == "SPAN") {
-            e.target.textContent = e.target.textContent.replace(/删除：/g, '');
-            e.target.style.backgroundColor = '#afefeb';
-        }
-    });
-    addEventHandler(node, 'click', function(e) {
-        if (e.target && e.target.nodeName == "SPAN") {
-            var temp = e.target.innerHTML.slice(3);
-            arr.splice(tagArr.indexOf(temp), 1);
-            node.removeChild(e.target);
-            //或者不用removeChild，修改数组后用render全部重新渲染
-        }
-    });
+    /*   
+        // 利用包裹元素事件代理 
+        addEventHandler(node, 'mouseover', function(e) {
+            if (e.target && e.target.nodeName == "SPAN") {
+                e.target.textContent = '删除：' + e.target.textContent;
+                e.target.style.backgroundColor = '#fe8787';
+            }
+        });
+        addEventHandler(node, 'mouseout', function(e) {
+            if (e.target && e.target.nodeName == "SPAN") {
+                e.target.textContent = e.target.textContent.replace(/删除：/g, '');
+                e.target.style.backgroundColor = '#afefeb';
+            }
+        });
+        addEventHandler(node, 'click', function(e) {
+            if (e.target && e.target.nodeName == "SPAN") {
+                var temp = e.target.innerHTML.slice(3);
+                arr.splice(arr.indexOf(temp), 1);
+                node.removeChild(e.target);
+                //或者不用removeChild，修改数组后用render全部重新渲染
+            }
+        });
+    */
+    // 事件还可以通过循环添加，利用闭包保存index值
+    for (var i = 0; i < node.children.length; i++) {
+        addEventHandler(node.children[i], 'click', function(cur) {
+            return function() {
+                arr.splice(cur, 1);
+                render(node, arr);
+            };
+        }(i));
+        addEventHandler(node.children[i], 'mouseover', function(cur) {
+            return function() {
+                node.children[cur].textContent = '删除：' + node.children[cur].textContent;
+                node.children[cur].style.backgroundColor = '#fe8787';
+            };
+        }(i));
+        addEventHandler(node.children[i], 'mouseout', function(cur) {
+            return function() {
+                node.children[cur].textContent = node.children[cur].textContent.replace(/删除：/g, '');
+                node.children[cur].style.backgroundColor = '#f4e7b9';
+            };
+        }(i));
+
+    }
 }
 
-addDelEvent(tagList, tagArr);
-addDelEvent(hobbyList, hobbyArr);
 
-// 可以抽象成对象方法的有render,dom
 // tag和爱好的输入，展示及删除都很类似，可以抽象成一个类的几个方法，创建两个实例来调用
 // 这个类具有getdata，deleteIndex，render，addDelEvent等方法
 
-// 删除事件还可以通过循环添加，利用闭包保存index值
+
+// 将task20中的搜索功能也添加到这里
+function fuzzySearch() {
+    var searchInput = $('#search-input').value.trim();
+    if (searchInput.indexOf('\\') !== -1) {
+        alert("请不要输入转义符号：'\\'，也不要输入正则表达式，只能普通字符串");
+        return;
+    }
+    if (searchInput.length > 0) {
+        var tempArr = hobbyArr.map(function(e) {
+            return e.replace(new RegExp(searchInput, 'g'), '<strong>' + searchInput + '</strong>');
+        });
+        render(hobbyList, tempArr);
+    }
+}
+addEventHandler($('#search-btn'), 'click', fuzzySearch);
+addEventHandler($('#search-input'), 'keyup', function(event) {
+    if (event.keyCode == 13) {
+        fuzzySearch();
+    }
+});

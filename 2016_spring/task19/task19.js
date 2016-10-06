@@ -113,6 +113,7 @@ function initQueue() {
     }
     queue.display();
 }
+initQueue();
 
 //交换函数。大错特错！！！
 /*function swap(a, b) {
