@@ -8,9 +8,8 @@
     margin: 0;
     padding: 0;
     font-family: Microsoft YaHei, sans-serif;
-    -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    box-sizing: border-box;
+         box-sizing: border-box;
     color: #333;
 }
 a {
@@ -124,7 +123,8 @@ header {
     position: absolute;
     left: 10%;
     top: 50%;
-    transform: translate(0,-50%);
+    -webkit-transform: translate(0,-50%);
+            transform: translate(0,-50%);
 }
 .sec1-begin h1 {
     color: #fff;
@@ -406,7 +406,8 @@ ul.dot{
     background-size: cover;
 }
 .sec7-item div.triangle {
-    transform: translate(30px,0) rotate(180deg);  /*将小三角左右翻转*/
+    -webkit-transform: translate(30px,0) rotate(180deg);
+            transform: translate(30px,0) rotate(180deg);  /*将小三角左右翻转*/
 }
 
 /*------------------------------sectiom-8------------------------------*/
@@ -545,7 +546,6 @@ ul.dot{
     cursor: pointer;
     color: #fff;
     -webkit-transition: font-size 0.4s ease-in-out;
-    -moz-transition: font-size 0.4s ease-in-out;
     transition: font-size 0.4s ease-in-out;
 }
 .icon i:hover{

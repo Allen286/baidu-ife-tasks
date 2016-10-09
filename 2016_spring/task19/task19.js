@@ -9,6 +9,7 @@ function addEvent(element, event, listener) {
     }
 }
 
+var timer = null;
 var wrap = document.getElementById('wrap');
 var btnList = document.getElementsByTagName('input');
 //队列对象，单例模式
@@ -57,17 +58,18 @@ var queue = {
 
 }
 
-//这算闭包吗？函数作为参数传入另一个函数，也是闭包的一种形式吧？跟函数作为返回值返回类似
+//闭包，函数作为参数传入另一个函数
 function pushNum(func) {
     var inputNum = parseInt(btnList[0].value);
-    if (isNaN(inputNum) || inputNum > 200 || inputNum < 1) {
-        alert('请输入1-200之间的整数');
-    } else {
-        func.call(queue, inputNum);
-        //由于作用域链的关系，传入的func函数中的变量可以访问到外部函数pushNum内的各变量
-        //func函数需要num形参，给该形参赋值了外部函数pushNum中的inputNUm变量值
-        //内部函数引用了外部函数变量，于是形成闭包，外部函数不会被销毁    
+    if (isNaN(inputNum) || inputNum > 300 || inputNum < 1) {
+        alert('请输入1-300之间的整数');
+        return;
     }
+    if (queue.str.length>=60) {
+        alert('最多允许添加60个，已经满了哦，请删除一些后再添加');
+        return;
+    }
+    func.call(queue, inputNum); 
 }
 
 //为四个按钮绑定事件侦听函数
@@ -106,14 +108,6 @@ function addDivDelEvent() {
 
 
 /*------------------------------task19部分的代码见下------------------------------*/
-//随机数来初始化队列
-function initQueue() {
-    for (var i = 0; i < 30; i++) {
-        queue.str[i] = Math.floor((Math.random() * 200) + 1);
-    }
-    queue.display();
-}
-initQueue();
 
 //交换函数。大错特错！！！
 /*function swap(a, b) {
@@ -165,12 +159,14 @@ function selectSort(arr) {
 
 // 冒泡排序动画版：相邻两两比较，值大的换到后面，元素向上移动至正确的顺序，像冒泡一样
 function animateBubbleSort(arr) {
-    clearInterval(timer);
+    if (timer) {
+        return;
+    }
     var i = 0,
         j = 1,
         temp = 0,
         len = arr.length;
-    var timer = setInterval(run, 10);
+    timer = setInterval(run, 10);
 
     function run() {
         if (i < len) {
@@ -188,6 +184,7 @@ function animateBubbleSort(arr) {
             }
         } else {
             clearInterval(timer);
+            timer = null;
             return;
         }
     }
@@ -195,12 +192,14 @@ function animateBubbleSort(arr) {
 
 // 选择排序动画版：第一个与后面每一个比较，哪个更小就把它的值换给第一个，找出最小的值放在第一位，接着找出第二小的值放在第二位
 function animateSelectSort(arr) {
-    clearInterval(timer);
+    if (timer) {
+        return;
+    }
     var i = 0,
         j = 1,
         temp = 0,
         len = arr.length;
-    var timer = setInterval(run, 10);
+    timer = setInterval(run, 10);
 
     function run() {
         if (i < len) {
@@ -218,18 +217,16 @@ function animateSelectSort(arr) {
             }
         } else {
             clearInterval(timer);
+            timer = null;
             return;
         }
     }
 }
 
 // 如何使排序有动画效果？定时器？
-// 上面这种写法不太好，即循环时间是由定时器interval的间隔控制的，run函数每执行一次i++或j++
-// 执行够相应次数后才会触发clearInterval清除定时器，所以执行时间固定，会出现“假完成状态”
+// 但上面这种写法不太好，循环时间是由定时器interval的间隔控制的，run函数每执行一次i++或j++
+// 执行够相应次数后才会触发clearInterval清除定时器，所以执行时间是固定
 
-addEvent(btnList[5], 'click', function() {
-    initQueue();
-});
 
 /*
 // 冒泡排序无动画版本，迅速排完序，排完后一次性渲染成图表
@@ -244,6 +241,10 @@ addEvent(btnList[7], 'click', function() {
 });
 */
 
+addEvent(btnList[5], 'click', function() {
+    initQueue();
+});
+
 addEvent(btnList[6], 'click', function() {
     animateBubbleSort(queue.str);
 });
@@ -251,13 +252,16 @@ addEvent(btnList[7], 'click', function() {
     animateSelectSort(queue.str);
 });
 
-/*有bug,排序动画执行中点击初始化或者其他排序方法会出现错乱？还有“假完成状态”
-js函数执行是单线程的
-动画处理函数按照时间间隔被添加到执行队列中
-而点击初始化时，初始化函数也被添加到执行队列，但是不管前面动画有没全部执行，只要空闲就会立即添加
-比如在20ms间隔中队列是空闲的，初始化函数立即加入队列，相当于插队，然后函数按队列顺序执行
-比如在点击其他排序时同理，几种不同排序函数会同时(交替)添加到队列中，同时(交替)作用与被排序的数组
-由于同时工作，排序加快，但该写法循环结束条件是由时间间隔控制的，还是需要时间间隔执行完
-即此时处于“假完成状态”，进行其他操作如初始化可以看到，排序函数仍在被不断添加到执行队列中，因为interval还没完成*/
+//随机数来初始化队列
+function initQueue() {
+    clearInterval(timer);
+    timer = null;
+    queue.str=[];
+    for (var i = 0; i < 30; i++) {
+        queue.str[i] = Math.floor((Math.random() * 300) + 1);
+    }
+    queue.display();
+}
+initQueue();
 
-//不知道怎么改进，后续再说吧。。
+// 怎样将排序与动画分开呢？

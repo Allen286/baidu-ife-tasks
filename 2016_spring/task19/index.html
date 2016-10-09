@@ -7,39 +7,40 @@
         input{
             margin-top: 10px;
         }
-        #big-wrap{
-            width: 960px;
-            margin: 0 auto;
+        body{
+            text-align: center;
         }
         #wrap {
-            padding-top: 20px;
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
         }
         #wrap span{
-            display: inline-block;
-            width: 15px;
+            display: block;
+            width: 16px;
             color: #fff;
             background-color: #f00;
-            text-align: center;
-            margin-left: 5px;
+            margin: 2px;
         }
     </style>
 </head>
 <body>
-    <div id = 'big-wrap'>
-        <p>输入1-200之间的数字来添加方块，数字代表方块高度</p>
-        <input type="text" id="num-input">
-        <input type="button" value="左侧入">
-        <input type="button" value="右侧入">
-        <input type="button" value="左侧出" style="margin-left: 30px;">
-        <input type="button" value="右侧出">
-        <br>
-        <input type="button" value="初始化">
-        <input type="button" value="冒泡排序">
-        <input type="button" value="选择排序">
-        <input type="button" value="快速排序">
+    <p>输入1-300之间的数字来添加方块，数字代表方块高度（单位：px）</p>
+    <input type="text" id="num-input">
+    <input type="button" value="左侧入">
+    <input type="button" value="右侧入">
+    <input type="button" value="左侧出" style="margin-left: 30px;">
+    <input type="button" value="右侧出">
+    <br>
+    <input type="button" value="初始化">
+    <input type="button" value="冒泡排序">
+    <input type="button" value="选择排序">
+    <input type="button" value="快速排序">
 
-        <div id="wrap"></div>
-    </div>
+    <div id="wrap"></div>
+
     <script src="task19.js"></script>
 </body>
 </html>

@@ -103,9 +103,14 @@ function graTimeChange() {
  * select发生变化时的处理函数
  */
 function citySelectChange() {
-  // 确定是否选项发生了变化 
+  // 确定是否选项发生了变化
+  // change事件只有在select选项变化时才触发，选择相同选项不会触发，所以此条判断省略 
   // if (pageState.nowSelectCity === this.value) {return;} 
-  // change事件只有在select选项变化时才触发，选择相同选项不会触发，所以上面的判断省略
+  
+  // 获取下拉选择框的选项值。下面两中方法输出一样，select.value在option设置了value属性时=value值，没有设置时=option内的文本值
+  // option选项里只能包含纯文本，即使输入标签也不会渲染，会当成纯文本字符串对待，typeof $0.value输出string
+  // console.log(this.value);
+  // console.log(this[this.selectedIndex].text); 
   pageState.nowSelectCity = this.value;
   // 修改图表标题
   document.getElementById('title-city').innerHTML=pageState.nowSelectCity;
