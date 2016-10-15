@@ -125,8 +125,10 @@ function uniqArray2(arr) {
 // 使用示例
 /*var a = [1, 3, 5, 7, 5, 3];
 var aa = ["a","b","c","b","c","e"]
-console.log(uniqArray2(a)); // [1, 3, 5, 7]
-console.log(uniqArray2(aa));*/
+console.log(uniqArray2(a)); // ["1", "3", "5", "7"]，object.keys()返回的是字符串数组，因为对象属性只能字符串，
+// 要真正实现去重得利用map再循环一次强制转化成number类型
+console.log(uniqArray2(aa));["a", "b", "c", "e"]
+*/
 
 // 实现一个简单的trim函数，用于去除一个字符串，头部和尾部的空白字符。假定空白字符只有半角空格、Tab
 function simpleTrim(str) {

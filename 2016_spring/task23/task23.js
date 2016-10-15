@@ -38,7 +38,7 @@ function travelAnimation(i, search) {
         divList = [],
         rootDiv = $('#tree')[0];
     switch (i) {
-        case 0:
+        /*case 0:
             // 深度优先遍历DFS
             func = function DFSSearch(root) {
                 if (!root) {
@@ -49,6 +49,27 @@ function travelAnimation(i, search) {
                     for (var i = 0; i < root.children.length; i++) {
                         DFSSearch(root.children[i]);
                     }
+                }
+            };
+            break;*/
+        case 0:
+            // 深度优先遍历DFS
+            func = function DFSSearch(root) {
+                if (!root) {
+                    return;
+                }
+                var stack = [];
+                stack.push(root);
+                while (stack.length > 0) {
+                    var node = stack.pop();
+                    divList.push(node);
+                    if (node.children.length > 0) {
+                        // stack = stack.concat([].slice.apply(node.children).reverse());
+                        for (var m = node.children.length - 1; m >= 0; m--) {
+                            stack.push(node.children[m]);
+                        }
+                    }
+
                 }
             };
             break;
@@ -64,7 +85,10 @@ function travelAnimation(i, search) {
                     var node = queue.shift();
                     divList.push(node);
                     if (node.children.length > 0) {
-                        queue = queue.concat([].slice.apply(node.children));
+                        // queue = queue.concat([].slice.apply(node.children));
+                        for (var m = 0; m < node.children.length; m++) {
+                            queue.push(node.children[m]);
+                        }
                     }
                 }
             };
