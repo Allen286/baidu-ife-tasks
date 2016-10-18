@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task29</title>
+    <script type="text/javascript">
+        window.onload=function(){
+            var oInput = document.getElementsByTagName('input')[0];
+            var btn = document.getElementsByTagName('button')[0];
+            var info = document.getElementById('info');
+            function validate(){
+                var text = oInput.value.trim();
+                var len = text.replace(/[\u0391-\uFFE5]/g,"aa").length;
+                if (len === 0) {
+                    info.innerHTML='名称不能为空';
+                    info.style.color='red';
+                    oInput.style.border='1px solid red';
+                } else if(len >= 4 && len <= 16){
+                    info.innerHTML = '格式正确';
+                    info.style.color='green';
+                    oInput.style.border='1px solid green';
+                } else {
+                    info.innerHTML='请输入长度为4~16位字符';
+                    info.style.color='red';
+                    oInput.style.border='1px solid red';
+                }
+            }
+            btn.onclick = validate;
+        }
+    </script>
+</head>
+<body>
+    <label>姓名：<input type="text"></label>
+    <button>验证</button>
+    <div id="info"></div>
+</body>
+</html>
