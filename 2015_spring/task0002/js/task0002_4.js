@@ -70,7 +70,6 @@ function handleInput(inputValue) {
 
 //给提示列表里的所有li元素添加mouseover，mouseout，以及click事件
 function clickLi() {
-    // console.log("clickLi");
     delegateEvent(hintUl, "li", "mouseover", function() { //调用util.js中的delegateEvent函数（事件代理）
         addClass(this, "active");
     });
@@ -102,7 +101,6 @@ function keydownLi() {
         var lis = hintUl.getElementsByTagName('li');
         var firstLi = lis[0];
         var lastLi = lis[lis.length - 1];
-        // console.log(highLightLi);
 
         //down
         if (event.keyCode == 40) {

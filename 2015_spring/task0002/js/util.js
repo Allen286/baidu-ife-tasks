@@ -361,7 +361,7 @@ function delegateEvent(element, tag, eventName, listener) {
         var event = e || window.event;
         var target = event.target || event.srcElement;
 
-        if (target && target.tagName === tag.toUpperCase()) {  //nodeName与tagName区别？
+        if (target && target.tagName === tag.toUpperCase()) {  //nodeName与tagName区别？tagName只能用于元素节点，nodename适于所有node节点
             listener.call(target, event);  //必须传入event参数？如果时间侦听器内部没用到event对象的话，就不用了吧？
         }
     });
