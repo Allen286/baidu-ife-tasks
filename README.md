@@ -5,5 +5,5 @@
 ## 2015_summer为[IFE2015暑期训练营](https://github.com/baidu-ife/ife/tree/master/2015_summer)的练习  
 ## 2016_spring为[IFE2016春季班](http://ife.baidu.com/task/all)  
 
-### [部分任务的在线demo](https://github.com/allen286/demo)  
+### [任务的在线demo](https://allen286.github.io/demo/)  
 
